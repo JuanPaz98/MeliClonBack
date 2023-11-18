@@ -1,3 +1,9 @@
+using MeliClon.Models.Common;
+using MeliClon.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,6 +24,34 @@ builder.Services.AddCors(options =>
     });
 });
 
+var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettingsSection);
+
+// jwt
+
+var appSettings = appSettingsSection.Get<AppSettings>();
+var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+builder.Services.AddAuthentication(d =>
+{
+    d.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    d.DefaultChallengeScheme= JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(d =>
+    {
+        d.RequireHttpsMetadata = false;
+        d.SaveToken = true;
+        d.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +62,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(corsPolicy);
+
+app.UseAuthentication();
 
 app.UseHttpsRedirection();
 

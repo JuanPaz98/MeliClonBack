@@ -17,16 +17,17 @@ namespace MeliClon.Controllers
             Response response = new Response();
             try
             {
-                using(RealSalesContext dbContext = new RealSalesContext())
+                using (RealSalesContext dbContext = new RealSalesContext())
                 {
                     var products = dbContext.Products.ToList();
                     response.Success = 1;
-                    response.Data= products;
+                    response.Data = products;
                     response.Message = "Success Response";
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                response.Message= ex.Message;
+                response.Message = ex.Message;
             }
 
             return Ok(response);
@@ -61,7 +62,7 @@ namespace MeliClon.Controllers
 
             try
             {
-                using(RealSalesContext dbContext = new RealSalesContext())
+                using (RealSalesContext dbContext = new RealSalesContext())
                 {
                     Product oProduct = new Product();
                     dbContext.Products.Add(oProduct);
@@ -70,8 +71,8 @@ namespace MeliClon.Controllers
                     response.Message = oProduct.Title + " Was added Successfully";
                     response.Data = oProduct;
                 }
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 response.Message = ex.Message;
             }
@@ -92,9 +93,9 @@ namespace MeliClon.Controllers
                     oClient.Title = oModel.Title;
                     oClient.Description = oModel.Description;
                     oClient.UnitPrice = oModel.UnitPrice;
-                    oClient.Category= oModel.Category;
+                    oClient.Category = oModel.Category;
                     oClient.Cost = oModel.Cost;
-                    oClient.Count= oModel.Count;
+                    oClient.Count = oModel.Count;
 
 
                     dbContext.Entry(oClient).State = Microsoft.EntityFrameworkCore.EntityState.Modified;

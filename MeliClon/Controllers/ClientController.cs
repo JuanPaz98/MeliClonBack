@@ -4,11 +4,13 @@ using MeliClon.Models;
 using MeliClon.Models.Response;
 using MeliClon.Models.Request;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeliClon.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClientController : ControllerBase
     {
         [HttpGet]
@@ -17,16 +19,17 @@ namespace MeliClon.Controllers
             Response response = new Response();
             try
             {
-                using(RealSalesContext dbContext = new RealSalesContext())
+                using (RealSalesContext dbContext = new RealSalesContext())
                 {
                     var clients = dbContext.Clients.ToList();
                     response.Success = 1;
-                    response.Data= clients;
+                    response.Data = clients;
                     response.Message = "Success Response";
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                response.Message= ex.Message;
+                response.Message = ex.Message;
             }
 
             return Ok(response);
@@ -39,7 +42,7 @@ namespace MeliClon.Controllers
 
             try
             {
-                using(RealSalesContext dbContext = new RealSalesContext())
+                using (RealSalesContext dbContext = new RealSalesContext())
                 {
                     Client oClient = new Client()
                     {
@@ -51,8 +54,8 @@ namespace MeliClon.Controllers
                     response.Message = oClient.Name + " Was added Successfully";
                     response.Data = oClient;
                 }
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 response.Message = ex.Message;
             }
