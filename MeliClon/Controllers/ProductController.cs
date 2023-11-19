@@ -20,6 +20,7 @@ namespace MeliClon.Controllers
                 using (RealSalesContext dbContext = new RealSalesContext())
                 {
                     var products = dbContext.Products.ToList();
+                    var productImages = dbContext.ProductImages.ToList();
                     response.Success = 1;
                     response.Data = products;
                     response.Message = "Success Response";
@@ -42,6 +43,9 @@ namespace MeliClon.Controllers
                 using (RealSalesContext dbContext = new RealSalesContext())
                 {
                     var product = dbContext.Products.Find(id);
+                    var productImages = dbContext.ProductImages
+                    .Where(pi => pi.Idproduct == id).ToList();
+
                     response.Success = 1;
                     response.Data = product;
                     response.Message = "Success Response";

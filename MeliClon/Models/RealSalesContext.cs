@@ -21,6 +21,8 @@ public partial class RealSalesContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductImage> ProductImages { get; set; }
+
     public virtual DbSet<Sale> Sales { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -95,9 +97,23 @@ public partial class RealSalesContext : DbContext
             entity.Property(e => e.UnitPrice)
                 .HasColumnType("decimal(16, 2)")
                 .HasColumnName("unitPrice");
+        });
+
+        modelBuilder.Entity<ProductImage>(entity =>
+        {
+            entity.ToTable("ProductImage");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Idproduct).HasColumnName("idproduct");
             entity.Property(e => e.UrlImage)
-                .HasMaxLength(255)
+                .HasMaxLength(500)
+                .IsUnicode(false)
                 .HasColumnName("urlImage");
+
+            entity.HasOne(d => d.IdproductNavigation).WithMany(p => p.ProductImages)
+                .HasForeignKey(d => d.Idproduct)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductImage_product");
         });
 
         modelBuilder.Entity<Sale>(entity =>

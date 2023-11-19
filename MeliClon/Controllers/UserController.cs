@@ -1,7 +1,6 @@
 ﻿using MeliClon.Models.Request;
 using MeliClon.Models.Response;
 using MeliClon.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeliClon.Controllers
@@ -24,7 +23,7 @@ namespace MeliClon.Controllers
 
             var userResponse = _userService.Auth(model);
 
-            if (userResponse == null)
+            if (userResponse.Email == null | userResponse.Token == null)
             {
                 response.Success = 0;
                 response.Message = "User or Password incorrect";

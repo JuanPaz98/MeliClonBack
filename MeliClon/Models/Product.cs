@@ -15,11 +15,11 @@ public partial class Product
 
     public string Category { get; set; } = null!;
 
-    public string? UrlImage { get; set; }
-
     public decimal Cost { get; set; }
 
     public int Count { get; set; }
 
     public virtual ICollection<Concept> Concepts { get; set; } = new List<Concept>();
+
+    public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 }
